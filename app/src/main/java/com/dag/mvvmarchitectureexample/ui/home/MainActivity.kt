@@ -1,11 +1,16 @@
-package com.dag.mvvmarchitectureexample
+package com.dag.mvvmarchitectureexample.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import com.dag.mvvmarchitectureexample.R
+import com.dag.mvvmarchitectureexample.base.BaseActivity
+import com.dag.mvvmarchitectureexample.databinding.ActivityMainBinding
+import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
+class MainActivity : BaseActivity<ActivityMainBinding>() {
+
+    override fun getLayoutId(): Int = R.layout.activity_main
+
+    @Inject
+    lateinit var mainActivityVM: MainActivityVM
+
+
 }

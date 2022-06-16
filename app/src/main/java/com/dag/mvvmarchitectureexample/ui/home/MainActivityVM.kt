@@ -1,4 +1,6 @@
 package com.dag.mvvmarchitectureexample.ui.home
 
-class MainVM {
+import com.dag.mvvmarchitectureexample.base.BaseVM
+
+class MainActivityVM:BaseVM() {
 }
