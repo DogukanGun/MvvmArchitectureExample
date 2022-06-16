@@ -1,4 +1,7 @@
 package com.dag.mvvmarchitectureexample.ui.home
 
-interface MainActivityVS {
+import com.dag.mvvmarchitectureexample.base.BaseVS
+
+sealed class MainActivityVS: BaseVS {
+    object StartState:MainActivityVS()
 }
