@@ -1,6 +1,4 @@
 package com.dag.mvvmarchitectureexample.base
 
 
-class MainApplication:BaseApplication() {
-
-}
+class MainApplication:BaseApplication() {}

@@ -3,11 +3,11 @@
     package="com.dag.mvvmarchitectureexample">
 
     <application
+        android:name=".base.MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:name=".base.MainApplication"
         android:supportsRtl="true"
         android:theme="@style/Theme.MvvmArchitectureExample">
         <activity
@@ -19,6 +19,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".ui.onboard.OnboardActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

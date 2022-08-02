@@ -9,4 +9,5 @@ class MainActivityVM:BaseVM() {
     fun changeState(){
         state.postValue(MainActivityVS.StartState)
     }
+
 }
