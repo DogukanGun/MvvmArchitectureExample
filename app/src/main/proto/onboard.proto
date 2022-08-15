@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.dag.mvvmarchitectureexample.data";
+option java_multiple_files = true;
+
+message Onboard {
+
+  enum OnboardType {
+    NONE = 0;
+    NOT_SHOWN = 1;
+    SHOWN = 2;
+  }
+
+  OnboardType filter = 1;
+  int32 isOnboardSkipped = 2;
+}

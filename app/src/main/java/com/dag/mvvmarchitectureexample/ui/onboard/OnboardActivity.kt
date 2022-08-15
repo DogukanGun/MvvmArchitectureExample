@@ -5,10 +5,9 @@ import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.dag.mvvmarchitectureexample.R
 import com.dag.mvvmarchitectureexample.base.BaseActivity
+import com.dag.mvvmarchitectureexample.data.Onboard
 import com.dag.mvvmarchitectureexample.databinding.ActivityOnboardBinding
-import com.dag.mvvmarchitectureexample.datastore.preferences.DataStorePreferencesKey
-import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
-import com.dag.mvvmarchitectureexample.ui.home.MainActivity
+import com.dag.mvvmarchitectureexample.datastore.proto.ProtoDataStoreImpl
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,20 +20,19 @@ class OnboardActivity : BaseActivity<OnboardVM, ActivityOnboardBinding>() {
     @Inject
     lateinit var onboardVM: OnboardVM
 
-    @Inject
-    lateinit var preferencesDataStore: PreferencesDataStore
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding?.goMainScreenBTN?.setOnClickListener(goToMainScreenBTNListener)
+        viewModel?.writeOnboardType()
+        viewModel?.onBoardIsShown()
     }
 
     private val goToMainScreenBTNListener = View.OnClickListener {
-        writeResult()
+        viewModel?.writeOnboardType(Onboard.OnboardType.SHOWN)
         finish()
     }
 
-    private fun writeResult() = lifecycleScope.launch{
-        preferencesDataStore.write(DataStorePreferencesKey.SHOW_ONBOARD,true)
-    }
+
 }

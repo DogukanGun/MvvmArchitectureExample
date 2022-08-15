@@ -3,6 +3,7 @@ package com.dag.mvvmarchitectureexample.di
 import android.app.Application
 import android.content.Context
 import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
+import com.dag.mvvmarchitectureexample.datastore.proto.ProtoDataStoreImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -16,5 +17,10 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun providePreferencesDataStore(context:Context) = PreferencesDataStore(context)
+    fun providePreferencesDatastore(context:Context) = PreferencesDataStore(context)
+
+    @Singleton
+    @Provides
+    fun provideProtoDatastore(context: Context) = ProtoDataStoreImpl(context)
+
 }

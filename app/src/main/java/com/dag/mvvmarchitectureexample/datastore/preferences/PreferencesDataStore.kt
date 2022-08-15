@@ -13,9 +13,11 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
 
 class PreferencesDataStore(private val context: Context) {
+    companion object{
+        val INFORMATION_SCREEN = booleanPreferencesKey("next_page")
+    }
 
     var loggedInScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-
     private val USER_PREFERENCES_NAME = "preferencesStore"
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = USER_PREFERENCES_NAME, scope = loggedInScope)
 

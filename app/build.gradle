@@ -3,11 +3,27 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'kotlin-kapt'
+    id 'com.google.protobuf'
+
 }
-apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlin-android'
 
-
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.20.1"
+    }
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+                kotlin {
+                    option 'lite'
+                }
+            }
+        }
+    }
+}
 
 android {
     compileSdk 32
@@ -70,4 +86,7 @@ dependencies {
 
     //Datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+    implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation "com.google.protobuf:protobuf-javalite:3.21.2"
+    implementation 'com.google.protobuf:protobuf-kotlin-lite:3.21.2'
 }

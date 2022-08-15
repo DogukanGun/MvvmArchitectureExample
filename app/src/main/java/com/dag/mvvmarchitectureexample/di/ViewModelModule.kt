@@ -1,6 +1,9 @@
 package com.dag.mvvmarchitectureexample.di
 
+import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
+import com.dag.mvvmarchitectureexample.datastore.proto.ProtoDataStoreImpl
 import com.dag.mvvmarchitectureexample.ui.home.MainActivityVM
+import com.dag.mvvmarchitectureexample.ui.information.InformationVM
 import com.dag.mvvmarchitectureexample.ui.onboard.OnboardVM
 import dagger.Module
 import dagger.Provides
@@ -10,8 +13,13 @@ import dagger.Provides
 class ViewModelModule {
 
     @Provides
-    fun provideMainActivityVM() = MainActivityVM()
+    fun provideMainActivityVM(preferencesDataStore: PreferencesDataStore,
+                              protoDataStore: ProtoDataStoreImpl)
+    = MainActivityVM(preferencesDataStore,protoDataStore)
 
     @Provides
-    fun provideOnboardVM() = OnboardVM()
+    fun provideOnboardVM(protoDataStore: ProtoDataStoreImpl) = OnboardVM(protoDataStore)
+
+    @Provides
+    fun provideInformationVM() = InformationVM()
 }

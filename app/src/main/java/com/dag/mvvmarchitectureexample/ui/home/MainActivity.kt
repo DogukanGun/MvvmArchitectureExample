@@ -7,10 +7,9 @@ import com.dag.mvvmarchitectureexample.R
 import com.dag.mvvmarchitectureexample.base.BaseActivity
 import com.dag.mvvmarchitectureexample.base.BaseVS
 import com.dag.mvvmarchitectureexample.databinding.ActivityMainBinding
-import com.dag.mvvmarchitectureexample.datastore.preferences.DataStorePreferencesKey
 import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
+import com.dag.mvvmarchitectureexample.ui.information.InformationActivity
 import com.dag.mvvmarchitectureexample.ui.onboard.OnboardActivity
-import com.dag.mvvmarchitectureexample.ui.onboard.OnboardVM
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
@@ -24,18 +23,21 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
     @Inject
     lateinit var mainActivityVM: MainActivityVM
 
-    @Inject
-    lateinit var preferencesDataStore: PreferencesDataStore
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        isOnboardShown()
+        viewModel?.isOnboardShown()
     }
 
-    private fun isOnboardShown() = lifecycleScope.launch {
-        preferencesDataStore.read(DataStorePreferencesKey.SHOW_ONBOARD).collect {
-            if (it != true) startActivity(OnboardActivity::class.java)
-            else viewModel?.changeState()
+    private fun handleNextPageStatus(isActive:Boolean){
+        if (!isActive) startActivity(InformationActivity::class.java)
+        else viewModel?.changeState()
+    }
+
+    private fun handleOnboardStatus(isActive: Boolean){
+        if (isActive){
+            startActivity(OnboardActivity::class.java)
+        }else{
+            viewModel?.isNextActive()
         }
     }
 
@@ -43,6 +45,12 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
         when (state) {
             MainActivityVS.StartState -> {
                 Toast.makeText(this, "Text is changed.", Toast.LENGTH_LONG).show()
+            }
+            is MainActivityVS.NextPageStatus -> {
+                handleNextPageStatus(state.active)
+            }
+            is MainActivityVS.OnboardStatus -> {
+                handleOnboardStatus(state.active)
             }
         }
     }
