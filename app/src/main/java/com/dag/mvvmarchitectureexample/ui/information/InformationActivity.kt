@@ -8,9 +8,12 @@ import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.wear.watchface.editor.EditorRequest
+import androidx.wear.watchface.editor.WatchFaceEditorContract
 import com.dag.mvvmarchitectureexample.R
 import com.dag.mvvmarchitectureexample.adapter.ItemClickListener
 import com.dag.mvvmarchitectureexample.adapter.basicAdapter
@@ -31,16 +34,16 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
 
     private val informationRepository = InformationRepository()
 
-    private val videoSaveUri by lazy { Uri.fromFile(externalCacheDir?.resolve("video.mp4")) }
+    private val imagePath = "image/*"
 
     private lateinit var captureVideoActivityResultLauncher:ActivityResultLauncher<Uri>
-    private lateinit var pickContactActivityResultLauncher:ActivityResultLauncher<Intent>
-    private lateinit var openDocumentActivityResultLauncher:ActivityResultLauncher<Intent>
+    private lateinit var pickContactActivityResultLauncher:ActivityResultLauncher<Void?>
+    private lateinit var openDocumentActivityResultLauncher:ActivityResultLauncher<Array<String>>
     private lateinit var requestPermissionActivityResultLauncher:ActivityResultLauncher<String>
     private lateinit var requestMultiplePermissionActivityResultLauncher:ActivityResultLauncher<Array<String>>
-    private lateinit var takePicturePreviewActivityResultLauncher:ActivityResultLauncher<Intent>
-    private lateinit var watchFaceEditorContractActivityResultLauncher:ActivityResultLauncher<Intent>
-    private lateinit var takePictureActivityResultLauncher:ActivityResultLauncher<Intent>
+    private lateinit var takePicturePreviewActivityResultLauncher:ActivityResultLauncher<Void?>
+    private lateinit var watchFaceEditorContractActivityResultLauncher:ActivityResultLauncher<EditorRequest>
+    private lateinit var takePictureActivityResultLauncher:ActivityResultLauncher<Uri>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,14 +60,33 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
     }
 
     private fun registerAllResultLaunchers(){
-        captureVideoActivityResultLauncher = registerForActivityResult(ActivityResultContracts.CaptureVideo(),
-            {
-                Toast.makeText(this,"Kaydedildi : $it",Toast.LENGTH_SHORT).show()
-            }
-        )
+        captureVideoActivityResultLauncher = registerForActivityResult(ActivityResultContracts.CaptureVideo()
+        ) {
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
+        takePictureActivityResultLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()){
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
+        takePicturePreviewActivityResultLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
+        pickContactActivityResultLauncher = registerForActivityResult(ActivityResultContracts.PickContact()){
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
+        openDocumentActivityResultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()){
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
         requestMultiplePermissionActivityResultLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
-        ) { permissions ->
+        ) {
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
+        requestPermissionActivityResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
+            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+        }
+        watchFaceEditorContractActivityResultLauncher = registerForActivityResult(
+            WatchFaceEditorContract()
+        ){
 
         }
     }
@@ -90,10 +112,10 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
                 captureVideoActivityResultLauncher.launch(imageUri)
             }
             InformationTypes.PickContact.name ->{
-
+                pickContactActivityResultLauncher.launch(null)
             }
             InformationTypes.OpenDocument.name ->{
-
+                openDocumentActivityResultLauncher.launch(arrayOf(imagePath))
             }
             InformationTypes.RequestPermission.name ->{
                 requestPermissionActivityResultLauncher.launch(
@@ -110,13 +132,23 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
                 )
             }
             InformationTypes.TakePicturePreview.name ->{
-
+                takePicturePreviewActivityResultLauncher.launch(null)
             }
             InformationTypes.WatchFaceEditorContract.name ->{
-
+                /*watchFaceEditorContractActivityResultLauncher.launch(
+                    EditorRequest(
+                        WILL COME LATER
+                    )
+                )*/
             }
             InformationTypes.TakePicture.name ->{
-
+                val imageUri = FileProvider.getUriForFile(
+                    this,
+                    "com.dag.mvvmarchitectureexample.provider",
+                    Environment.getExternalStoragePublicDirectory(Environment.
+                    DIRECTORY_DCIM+"/Camera/image.png")
+                )
+                takePictureActivityResultLauncher.launch(imageUri)
             }
         }
     }
