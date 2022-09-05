@@ -1,10 +1,7 @@
 package com.dag.mvvmarchitectureexample.datastore.proto
 
-import android.content.Context
 import androidx.datastore.core.CorruptionException
-import androidx.datastore.core.DataStore
 import androidx.datastore.core.Serializer
-import androidx.datastore.dataStore
 import androidx.datastore.preferences.protobuf.InvalidProtocolBufferException
 import com.dag.mvvmarchitectureexample.data.Onboard
 import kotlinx.coroutines.Dispatchers

@@ -12,4 +12,5 @@ class InformationVM @Inject constructor(val preferencesDataStore: PreferencesDat
     fun <T> writeToPreferencesDatastore(key: Preferences.Key<T>, value:T) = viewModelScope.launch{
         preferencesDataStore.write(key,value)
     }
+
 }

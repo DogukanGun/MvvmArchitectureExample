@@ -1,6 +1,6 @@
 package com.dag.mvvmarchitectureexample.di
 
-import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
+import   com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
 import com.dag.mvvmarchitectureexample.datastore.proto.ProtoDataStoreImpl
 import com.dag.mvvmarchitectureexample.ui.home.MainActivityVM
 import com.dag.mvvmarchitectureexample.ui.information.InformationVM
@@ -21,5 +21,5 @@ class ViewModelModule {
     fun provideOnboardVM(protoDataStore: ProtoDataStoreImpl) = OnboardVM(protoDataStore)
 
     @Provides
-    fun provideInformationVM() = InformationVM()
+    fun provideInformationVM(preferencesDataStore: PreferencesDataStore) = InformationVM(preferencesDataStore)
 }

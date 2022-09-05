@@ -29,7 +29,7 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
     }
 
     private fun handleNextPageStatus(isActive:Boolean){
-        if (!isActive) startActivity(InformationActivity::class.java)
+        if (isActive) startActivity(InformationActivity::class.java)
         else viewModel?.changeState()
     }
 

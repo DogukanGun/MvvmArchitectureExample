@@ -23,12 +23,10 @@ import java.io.IOException
 import javax.inject.Inject
 
 class ProtoDataStoreImpl @Inject constructor(val context: Context) : ProtoStore {
-
     val Context.protoDatastore: DataStore<Onboard> by dataStore(
         fileName = "onboard.pb",
         serializer = OnboardSerializer
     )
-
     override val filtersFlow: Flow<Onboard>
         get() = context.protoDatastore.data.catch { exception ->
             if (exception is IOException){
@@ -38,18 +36,14 @@ class ProtoDataStoreImpl @Inject constructor(val context: Context) : ProtoStore 
                 throw exception
             }
         }
-
     override suspend fun changeFilter(onboard: Onboard.OnboardType) {
         context.protoDatastore.updateData { currentFilters ->
             currentFilters.toBuilder().setFilter(onboard).build()
         }
     }
-
     override suspend fun changeOnboardSkipped(enable: Boolean) {
         context.protoDatastore.updateData { currentFilters ->
             currentFilters.toBuilder().setIsOnboardSkipped(if (enable) 1 else 0).build()
         }
     }
-
-
 }
