@@ -2,6 +2,7 @@ package com.dag.mvvmarchitectureexample.di
 
 import   com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
 import com.dag.mvvmarchitectureexample.datastore.proto.ProtoDataStoreImpl
+import com.dag.mvvmarchitectureexample.ui.calculation.CalculationVM
 import com.dag.mvvmarchitectureexample.ui.home.MainActivityVM
 import com.dag.mvvmarchitectureexample.ui.information.InformationVM
 import com.dag.mvvmarchitectureexample.ui.onboard.OnboardVM
@@ -22,4 +23,7 @@ class ViewModelModule {
 
     @Provides
     fun provideInformationVM(preferencesDataStore: PreferencesDataStore) = InformationVM(preferencesDataStore)
+
+    @Provides
+    fun provideCalculationVM() = CalculationVM()
 }

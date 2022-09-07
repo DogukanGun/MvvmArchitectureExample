@@ -8,5 +8,7 @@ enum class InformationTypes {
     RequestMultiplePermission,
     TakePicturePreview,
     WatchFaceEditorContract,
-    TakePicture
+    TakePicture,
+    StartActivity,
+    OwnIntent
 }

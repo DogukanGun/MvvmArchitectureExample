@@ -1,6 +1,7 @@
 package com.dag.mvvmarchitectureexample.ui.information
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,19 +9,18 @@ import android.os.Environment
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.wear.watchface.editor.EditorRequest
-import androidx.wear.watchface.editor.WatchFaceEditorContract
 import com.dag.mvvmarchitectureexample.R
 import com.dag.mvvmarchitectureexample.adapter.ItemClickListener
 import com.dag.mvvmarchitectureexample.adapter.basicAdapter
 import com.dag.mvvmarchitectureexample.base.BaseActivity
 import com.dag.mvvmarchitectureexample.databinding.ActivityInformationBinding
 import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
-import java.util.*
+import com.dag.mvvmarchitectureexample.ui.calculation.CalculationActivity
+import com.dag.mvvmarchitectureexample.ui.onboard.OnboardActivity
 import javax.inject.Inject
 
 
@@ -36,14 +36,16 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
 
     private val imagePath = "image/*"
 
+    private lateinit var pageChangerActivityResultLauncher:ActivityResultLauncher<Intent>
     private lateinit var captureVideoActivityResultLauncher:ActivityResultLauncher<Uri>
     private lateinit var pickContactActivityResultLauncher:ActivityResultLauncher<Void?>
     private lateinit var openDocumentActivityResultLauncher:ActivityResultLauncher<Array<String>>
     private lateinit var requestPermissionActivityResultLauncher:ActivityResultLauncher<String>
     private lateinit var requestMultiplePermissionActivityResultLauncher:ActivityResultLauncher<Array<String>>
     private lateinit var takePicturePreviewActivityResultLauncher:ActivityResultLauncher<Void?>
-    private lateinit var watchFaceEditorContractActivityResultLauncher:ActivityResultLauncher<EditorRequest>
+    //private lateinit var watchFaceEditorContractActivityResultLauncher:ActivityResultLauncher<EditorRequest>
     private lateinit var takePictureActivityResultLauncher:ActivityResultLauncher<Uri>
+    private lateinit var ownActivityResultLauncher: ActivityResultLauncher<Intent>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +62,11 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
     }
 
     private fun registerAllResultLaunchers(){
+        pageChangerActivityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            if (it.resultCode == Activity.RESULT_OK){
+                startOnboardWithCustomAnim()
+            }
+        }
         captureVideoActivityResultLauncher = registerForActivityResult(ActivityResultContracts.CaptureVideo()
         ) {
             Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
@@ -84,11 +91,14 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
         requestPermissionActivityResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
             Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
         }
-        watchFaceEditorContractActivityResultLauncher = registerForActivityResult(
+        ownActivityResultLauncher = registerForActivityResult(InformationContract()){
+            Toast.makeText(this,"Number : $it",Toast.LENGTH_LONG).show()
+        }
+        /*watchFaceEditorContractActivityResultLauncher = registerForActivityResult(
             WatchFaceEditorContract()
         ){
 
-        }
+        }*/
     }
 
     private val recyclerItemClickListener = ItemClickListener<InformationItem>{position, item ->
@@ -112,7 +122,12 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
                 captureVideoActivityResultLauncher.launch(imageUri)
             }
             InformationTypes.PickContact.name ->{
-                pickContactActivityResultLauncher.launch(null)
+                binding?.root?.let {
+                    pickContactActivityResultLauncher.launch(
+                        null,
+                        ActivityOptionsCompat.makeScaleUpAnimation(it,10,10,20,20)
+                    )
+                }
             }
             InformationTypes.OpenDocument.name ->{
                 openDocumentActivityResultLauncher.launch(arrayOf(imagePath))
@@ -150,6 +165,25 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
                 )
                 takePictureActivityResultLauncher.launch(imageUri)
             }
+            InformationTypes.StartActivity.name ->{
+                binding?.root?.let {
+                    pageChangerActivityResultLauncher.launch(
+                        OnboardActivity.newIntent(this,Activity.RESULT_OK),
+                        ActivityOptionsCompat.makeScaleUpAnimation(it,10,10,20,20)
+                    )
+                }
+            }
+            InformationTypes.OwnIntent.name ->{
+                ownActivityResultLauncher.launch(
+                    CalculationActivity.newIntent(this)
+                )
+            }
         }
+    }
+    private fun startOnboardWithCustomAnim(){
+        pageChangerActivityResultLauncher.launch(
+            OnboardActivity.newIntent(this,Activity.RESULT_CANCELED),
+            ActivityOptionsCompat.makeCustomAnimation(this,R.anim.slide_in_left,R.anim.slide_out_left)
+        )
     }
 }

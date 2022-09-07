@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.dag.mvvmarchitectureexample">
 
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -26,6 +27,10 @@
                 android:resource="@xml/provider_paths" />
         </provider>
         <activity
+            android:name=".ui.onboard.OnboardActivity"
+            tools:node="merge"
+            android:exported="true" />
+        <activity
             android:name=".ui.home.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -35,11 +40,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.onboard.OnboardActivity"
-            android:exported="true" />
-        <activity
             android:name=".ui.information.InformationActivity"
-            android:exported="false"/>
+            android:exported="true"/>
+        <activity android:name=".ui.calculation.CalculationActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>
