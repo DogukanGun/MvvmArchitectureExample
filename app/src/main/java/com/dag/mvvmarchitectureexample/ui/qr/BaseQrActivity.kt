@@ -33,6 +33,11 @@ abstract class BaseQrActivity : AppCompatActivity(), QrHelper.BarcodeHelperCallb
         })
     }
 
+    override fun onStop() {
+        super.onStop()
+        barcodeHelper.releaseBarcodeDetector()
+    }
+
     fun startBarcodeDetection(squareViewQr: SurfaceView) {
         barcodeHelper.apply {
             initCameraSource(squareViewQr)
