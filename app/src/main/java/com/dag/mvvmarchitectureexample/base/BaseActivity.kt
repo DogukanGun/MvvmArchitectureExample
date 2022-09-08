@@ -7,9 +7,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.dag.mvvmarchitectureexample.BR
+import com.dag.mvvmarchitectureexample.ui.qr.BaseQrActivity
 import dagger.android.AndroidInjection
 
-abstract class BaseActivity<VM : BaseVM, DB : ViewDataBinding> : AppCompatActivity() {
+abstract class BaseActivity<VM : BaseVM, DB : ViewDataBinding> : BaseQrActivity() {
 
     abstract fun getLayoutId(): Int
     abstract fun getLayoutViewModel(): VM

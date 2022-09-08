@@ -32,8 +32,6 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
     @Inject
     lateinit var informationVM: InformationVM
 
-    private val informationRepository = InformationRepository()
-
     private val imagePath = "image/*"
 
     private lateinit var pageChangerActivityResultLauncher:ActivityResultLauncher<Intent>
@@ -55,7 +53,7 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
             permissionListRV.adapter = basicAdapter<InformationItem> {
                 itemLayoutId = R.layout.permission_layout
                 itemClickListener = recyclerItemClickListener
-                list = informationRepository.getInformationItemList()
+                list = informationVM.getInformationItemList()
             }
         }
         registerAllResultLaunchers()
@@ -107,6 +105,7 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
 
     private val buttonClickListener = View.OnClickListener {
         viewModel?.writeToPreferencesDatastore(PreferencesDataStore.INFORMATION_SCREEN,true)
+        finish()
     }
 
     fun executeCommand(command:String){

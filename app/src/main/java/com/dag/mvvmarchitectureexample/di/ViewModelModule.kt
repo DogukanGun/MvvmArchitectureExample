@@ -3,9 +3,12 @@ package com.dag.mvvmarchitectureexample.di
 import   com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
 import com.dag.mvvmarchitectureexample.datastore.proto.ProtoDataStoreImpl
 import com.dag.mvvmarchitectureexample.ui.calculation.CalculationVM
+import com.dag.mvvmarchitectureexample.ui.dashboard.DashboardVM
 import com.dag.mvvmarchitectureexample.ui.home.MainActivityVM
 import com.dag.mvvmarchitectureexample.ui.information.InformationVM
 import com.dag.mvvmarchitectureexample.ui.onboard.OnboardVM
+import com.dag.mvvmarchitectureexample.ui.qr.QrVM
+import com.dag.mvvmarchitectureexample.ui.sms.SmsVM
 import dagger.Module
 import dagger.Provides
 
@@ -26,4 +29,13 @@ class ViewModelModule {
 
     @Provides
     fun provideCalculationVM() = CalculationVM()
+
+    @Provides
+    fun provideDashboardVM() = DashboardVM()
+
+    @Provides
+    fun provideSmsVM() = SmsVM()
+
+    @Provides
+    fun provideQrVM() = QrVM()
 }

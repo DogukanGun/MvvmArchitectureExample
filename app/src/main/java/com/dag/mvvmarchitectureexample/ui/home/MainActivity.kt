@@ -8,6 +8,7 @@ import com.dag.mvvmarchitectureexample.base.BaseActivity
 import com.dag.mvvmarchitectureexample.base.BaseVS
 import com.dag.mvvmarchitectureexample.databinding.ActivityMainBinding
 import com.dag.mvvmarchitectureexample.datastore.preferences.PreferencesDataStore
+import com.dag.mvvmarchitectureexample.ui.dashboard.DashboardActivity
 import com.dag.mvvmarchitectureexample.ui.information.InformationActivity
 import com.dag.mvvmarchitectureexample.ui.onboard.OnboardActivity
 import kotlinx.coroutines.*
@@ -29,7 +30,7 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
     }
 
     private fun handleNextPageStatus(isActive:Boolean){
-        if (isActive) startActivity(InformationActivity::class.java)
+        if (isActive) startActivity(DashboardActivity::class.java)
         else viewModel?.changeState()
     }
 
