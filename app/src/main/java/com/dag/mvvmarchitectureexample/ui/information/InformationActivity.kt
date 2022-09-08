@@ -69,27 +69,27 @@ class InformationActivity:BaseActivity<InformationVM,ActivityInformationBinding>
         }
         captureVideoActivityResultLauncher = registerForActivityResult(ActivityResultContracts.CaptureVideo()
         ) {
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         takePictureActivityResultLauncher = registerForActivityResult(ActivityResultContracts.TakePicture()){
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         takePicturePreviewActivityResultLauncher = registerForActivityResult(ActivityResultContracts.TakePicturePreview()) {
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         pickContactActivityResultLauncher = registerForActivityResult(ActivityResultContracts.PickContact()){
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         openDocumentActivityResultLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()){
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         requestMultiplePermissionActivityResultLauncher = registerForActivityResult(
             ActivityResultContracts.RequestMultiplePermissions()
         ) {
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         requestPermissionActivityResultLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()){
-            Toast.makeText(this, "Kaydedildi : $it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Saved : $it", Toast.LENGTH_SHORT).show()
         }
         ownActivityResultLauncher = registerForActivityResult(InformationContract()){
             Toast.makeText(this,"Number : $it",Toast.LENGTH_LONG).show()
