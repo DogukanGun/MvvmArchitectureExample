@@ -6,10 +6,11 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Handler
 import android.os.Looper
+import android.os.Process
+import android.text.BoringLayout
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -29,19 +30,24 @@ class QrHelper(
     private val context: Context,
     private val activity: Activity,
     private val helperCallback: BarcodeHelperCallback,
+    private val barcodeType: Int = Barcode.QR_CODE
 ) {
-    private val barcodeDetector = BarcodeDetector.Builder(context).setBarcodeFormats(Barcode.QR_CODE).build()
+    private val barcodeDetector =
+        BarcodeDetector.Builder(context).setBarcodeFormats(barcodeType).build()
     private val codeScanned = AtomicBoolean(false)
     private var cameraSource: CameraSource? = null
     private var surfaceHolder: SurfaceHolder? = null
-    private var requestPermissionActivityResultLauncher: ActivityResultLauncher<String> = (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.RequestPermission()){
-        surfaceHolder?.let { startCameraSource(it) }
-    }
+    private var requestPermissionActivityResultLauncher: ActivityResultLauncher<String> =
+        (activity as ComponentActivity).registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+            surfaceHolder?.let { startCameraSource(it) }
+        }
 
     fun initCameraSource(containerView: View) {
         context.let {
             val width = containerView.width
-            val ratio = DeviceUtil.getScreenHeight(activity).toDouble() / DeviceUtil.getScreenWidth(activity).toDouble()
+            val ratio = DeviceUtil.getScreenHeight(activity).toDouble() / DeviceUtil.getScreenWidth(
+                activity
+            ).toDouble()
             cameraSource = CameraSource.Builder(it, barcodeDetector)
                 .setAutoFocusEnabled(true)
                 .setRequestedPreviewSize(width, (width * ratio).roundToInt())
@@ -50,15 +56,20 @@ class QrHelper(
             startCameraSource((containerView as SurfaceView).holder)
         }
     }
+
     private fun startCameraSource(surfaceHolder: SurfaceHolder) {
         context.let {
-            if (ContextCompat.checkSelfPermission(it, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.CAMERA
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
                 try {
                     cameraSource?.start(surfaceHolder)
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     helperCallback.onError(e.message.toString())
                 }
-            }else{
+            } else {
                 this.surfaceHolder = surfaceHolder
                 requestPermissionActivityResultLauncher.launch(
                     Manifest.permission.CAMERA
@@ -66,11 +77,12 @@ class QrHelper(
             }
         }
     }
+
     fun startBarcodeDetection() {
         codeScanned.set(false)
-
         barcodeDetector.setProcessor(object : Detector.Processor<Barcode> {
             override fun release() {
+
             }
 
             override fun receiveDetections(detections: Detector.Detections<Barcode>?) {
@@ -83,17 +95,28 @@ class QrHelper(
             }
         })
     }
+
     fun releaseBarcodeDetector() {
         codeScanned.set(true)
-        Handler(Looper.getMainLooper()).post {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
                 cameraSource?.release()
                 barcodeDetector.release()
-            }catch (e:Exception){ }
+            } catch (e: Exception) {
+            }
         }
     }
+
     interface BarcodeHelperCallback {
         fun onBarcodeDetected(displayValue: String)
         fun onError(message: String)
     }
+
+    data class BarcodeSettings(
+        var parseResult:Boolean = true,
+        var throwException:Boolean = false,
+        var autoFocus:Boolean = true,
+        var cameraSource:CameraSource? = null,
+        var process: Detector.Processor<Barcode>,
+    )
 }

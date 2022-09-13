@@ -1,12 +1,10 @@
 package com.dag.mvvmarchitectureexample.ui.qr
 
-import android.Manifest
-import android.content.pm.PackageManager
+
 import android.os.Bundle
 import android.view.SurfaceHolder
 import android.view.ViewTreeObserver
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.dag.mvvmarchitectureexample.R
 import com.dag.mvvmarchitectureexample.base.BaseActivity
 import com.dag.mvvmarchitectureexample.databinding.ActivityQrBinding
@@ -19,8 +17,6 @@ class QrFeatureActivity:BaseActivity<QrVM,ActivityQrBinding>() {
 
     @Inject
     lateinit var qrVM: QrVM
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +59,6 @@ class QrFeatureActivity:BaseActivity<QrVM,ActivityQrBinding>() {
             })
         }
     }
-
     override fun onBarcodeDetected(displayValue: String) {
         super.onBarcodeDetected(displayValue)
         Toast.makeText(this,displayValue,Toast.LENGTH_LONG).show()
